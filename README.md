@@ -1,6 +1,6 @@
 # locale-matcher
 
-Super-fast locale matcher in [**just 300 bytes gzipped**](https://bundlephobia.com/package/locale-matcher).
+[Super-fast](#performance) locale matcher in [just 450 bytes gzipped](https://bundlephobia.com/package/locale-matcher).
 
 ```shell
 npm install --save-prod locale-matcher
@@ -35,7 +35,7 @@ examples of valid locales: `en`, `en_US`, `en-US`, `en-us` and `en_US.UTF-8`.
 
 # Performance
 
-Clone this repo and use `npm ci && npm run perf` to run the performance testsuite.
+Clone this repo and use `npm ci && npm run perf` to run the performance test suite.
 
 |  | Ops/sec |
 | --- | ---: | 
