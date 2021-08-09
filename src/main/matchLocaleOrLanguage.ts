@@ -10,8 +10,9 @@ import {lowerCharCodeAt} from './lowerCharCodeAt';
 export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales: Array<string>): number {
   const requestedLength = requestedLocale.length;
 
-  let languageOnlyIndex = -1;
-  let languageBaseIndex = -1;
+  let matchSignificantLength = 1 / 0;
+  let matchSubtagCount = 1;
+  let matchIndex = -1;
 
   for (let k = 0; k < supportedLocales.length; ++k) {
 
@@ -29,6 +30,8 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
 
     let supportedEnded;
     let requestedEnded;
+
+    let supportedSignificantLength = 0;
 
     while (true) {
 
@@ -58,6 +61,10 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
       supportedEnded = supportedCharCode === -1;
       requestedEnded = requestedCharCode === -1;
 
+      if (!supportedEnded) {
+        ++supportedSignificantLength;
+      }
+
       if (supportedSubtagIndex === -1 || supportedSubtagSeparated) {
         ++supportedSubtagIndex;
       }
@@ -74,15 +81,32 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
       }
     }
 
-    if (requestedSubtagIndex > 0 || requestedEnded) {
-      if (supportedSubtagIndex === 0 && supportedEnded && languageOnlyIndex === -1) {
-        languageOnlyIndex = k;
+    // The number of matched subtags
+    const requestedSubtagCount = requestedEnded ? requestedSubtagIndex + 1 : requestedSubtagIndex;
+    const supportedSubtagCount = supportedEnded ? supportedSubtagIndex + 1 : supportedSubtagIndex;
+
+    if (requestedSubtagCount > 0 && supportedSubtagCount >= matchSubtagCount) {
+
+      if (supportedSubtagCount === matchSubtagCount) {
+        // The same number of tags matched, so need to pick the shortest locale
+
+        while (i < supportedLength) {
+          if (lowerCharCodeAt(supportedLocale, i) !== -1) {
+            ++supportedSignificantLength;
+          }
+          ++i;
+        }
+
+        if (supportedSignificantLength >= matchSignificantLength) {
+          continue;
+        }
       }
-      if (supportedSubtagIndex > 0 && languageBaseIndex === -1) {
-        languageBaseIndex = k;
-      }
+
+      matchSignificantLength = supportedSignificantLength;
+      matchSubtagCount = supportedSubtagCount;
+      matchIndex = k;
     }
   }
 
-  return languageOnlyIndex !== -1 ? languageOnlyIndex : languageBaseIndex;
+  return matchIndex;
 }

@@ -17,12 +17,10 @@ describe('matchLocale', () => {
     expect(matchLocale('EN_GB', ['en-us', 'en-gb', 'ru'])).toBe(1);
   });
 
-  test('matches language-only locale first', () => {
+  test('matches shortest locale', () => {
     expect(matchLocale('en_US', ['en_AU', 'en_GB', 'en', 'ru'])).toBe(2);
-  });
-
-  test('matches first locale with the same language', () => {
     expect(matchLocale('en_US', ['pt', 'en_AU', 'en_GB', 'en_IN', 'ru'])).toBe(1);
+    expect(matchLocale('ll-aaa-bbb', ['ll', 'll-aaa', 'll-aaa-ccc'])).toBe(1);
   });
 
   test('returns -1 if no locale matched', () => {
