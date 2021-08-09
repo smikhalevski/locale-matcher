@@ -9,15 +9,20 @@ npm install --save-prod locale-matcher
 # Usage
 
 ```ts
-import {matchLocale, pickLocale} from 'locale-matcher';
+import {matchLocale, pickLocale, normalizeLocale} from 'locale-matcher';
+
 
 matchLocale(/*requestedLocale*/ 'en-US', /*supportedLocale*/ ['en-AU', 'en-GB', 'en', 'ru']); // → 2
 
 matchLocale(['en-GB', 'ru-RU'], ['pt', 'en', 'ru']); // → 1
 
-pickLocale('en-US', ['en-AU', 'en-GB', 'en', 'ru']); // → 'en'
+
+pickLocale('__en-US__', ['en-AU', 'en-GB', 'en', 'ru']); // → 'en'
 
 pickLocale(['es-ES', 'cz-CZ'], ['en', 'ru'], /*defaultLocale*/ 'en_US'); // → 'en_US'
+
+
+normalizeLocale('__EN__US__'); // → 'en-us'
 ```
 
 The locale/language matching algorithm:
