@@ -1,4 +1,4 @@
-# locale-matcher
+# locale-matcher [![build](https://github.com/smikhalevski/locale-matcher/actions/workflows/master.yml/badge.svg?branch=master&event=push)](https://github.com/smikhalevski/locale-matcher/actions/workflows/master.yml)
 
 [Super-fast](#performance) locale matcher and normalizer in [just 600 bytes gzipped](https://bundlephobia.com/package/locale-matcher).
 
