@@ -32,9 +32,7 @@ so `mn-Cyrl-MN` is not distinct from `MN_cYRL=mn` or `mN+cYrL.Mn`.
 
 Locales are expected start with [ISO 639-1](https://en.wikipedia.org/wiki/ISO_639-1) or
 [ISO 639-2](https://en.wikipedia.org/wiki/ISO_639-2) language code. For example `en`, `en_US`, `en-US`, `en-us`
-and even `HE/il-u-ca---hebrew+tz/jeruslm` are valid locales for this library.
-
-This library does't depend on `Intl`.
+and even `HE/il-u-ca---hebrew+tz/jeruslm` are valid locales.
 
 # Performance
 

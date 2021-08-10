@@ -10,7 +10,7 @@ import {lowerCharCodeAt} from './lowerCharCodeAt';
 export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales: Array<string>): number {
   const requestedLength = requestedLocale.length;
 
-  let matchSignificantLength = 1 / 0;
+  let matchAlphaLength = 1 / 0;
   let matchSubtagCount = 1;
   let matchIndex = -1;
 
@@ -31,7 +31,8 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
     let supportedEnded;
     let requestedEnded;
 
-    let supportedSignificantLength = 0;
+    // The number of alpha characters in supported locale
+    let supportedAlphaLength = 0;
 
     while (true) {
 
@@ -62,7 +63,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
       requestedEnded = requestedCharCode === -1;
 
       if (!supportedEnded) {
-        ++supportedSignificantLength;
+        ++supportedAlphaLength;
       }
 
       if (supportedSubtagIndex === -1 || supportedSubtagSeparated) {
@@ -85,27 +86,28 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
     const requestedSubtagCount = requestedEnded ? requestedSubtagIndex + 1 : requestedSubtagIndex;
     const supportedSubtagCount = supportedEnded ? supportedSubtagIndex + 1 : supportedSubtagIndex;
 
-    if (requestedSubtagCount > 0 && supportedSubtagCount >= matchSubtagCount) {
+    if (requestedSubtagCount === 0 || supportedSubtagCount < matchSubtagCount) {
+      continue;
+    }
 
-      if (supportedSubtagCount === matchSubtagCount) {
-        // The same number of tags matched, so need to pick the shortest locale
+    if (supportedSubtagCount === matchSubtagCount) {
+      // The same number of subtags is the same, so prefer the shorter locale
 
-        while (i < supportedLength) {
-          if (lowerCharCodeAt(supportedLocale, i) !== -1) {
-            ++supportedSignificantLength;
-          }
-          ++i;
+      while (i < supportedLength) {
+        if (lowerCharCodeAt(supportedLocale, i) !== -1) {
+          ++supportedAlphaLength;
         }
-
-        if (supportedSignificantLength >= matchSignificantLength) {
-          continue;
-        }
+        ++i;
       }
 
-      matchSignificantLength = supportedSignificantLength;
-      matchSubtagCount = supportedSubtagCount;
-      matchIndex = k;
+      if (supportedAlphaLength >= matchAlphaLength) {
+        continue;
+      }
     }
+
+    matchAlphaLength = supportedAlphaLength;
+    matchSubtagCount = supportedSubtagCount;
+    matchIndex = k;
   }
 
   return matchIndex;

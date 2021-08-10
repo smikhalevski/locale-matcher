@@ -17,10 +17,11 @@ describe('matchLocale', () => {
     expect(matchLocale('EN_GB', ['en-us', 'en-gb', 'ru'])).toBe(1);
   });
 
-  test('matches shortest locale', () => {
+  test('matches shorter locale', () => {
     expect(matchLocale('en_US', ['en_AU', 'en_GB', 'en', 'ru'])).toBe(2);
     expect(matchLocale('en_US', ['pt', 'en_AU', 'en_GB', 'en_IN', 'ru'])).toBe(1);
     expect(matchLocale('ll-aaa-bbb', ['ll', 'll-aaa', 'll-aaa-ccc'])).toBe(1);
+    expect(matchLocale('ll-aaa-bbb', ['ll', 'll-aaa-ccc', 'll-aaa-ccc-ddd'])).toBe(1);
   });
 
   test('returns -1 if no locale matched', () => {
@@ -38,28 +39,35 @@ describe('matchLocale', () => {
 
   test('ignores leading separators', () => {
     expect(matchLocale('__en-US', ['ru-RU', 'en', 'en-GB'])).toBe(1);
-    expect(matchLocale('__en-US', ['ru-RU', '++++en', 'en-GB'])).toBe(1);
-    expect(matchLocale('__en-US', ['ru-RU', 'en++++', 'en-GB'])).toBe(1);
+    expect(matchLocale('__en-US', ['ru-RU', '+++en', 'en-GB'])).toBe(1);
+    expect(matchLocale('__en-US', ['ru-RU', 'en+++', 'en-GB'])).toBe(1);
   });
 
   test('ignores training separators', () => {
     expect(matchLocale('en-US__', ['ru-RU', 'en', 'en-GB'])).toBe(1);
-    expect(matchLocale('en-US__', ['ru-RU', '++++en', 'en-GB'])).toBe(1);
-    expect(matchLocale('en-US__', ['ru-RU', 'en++++', 'en-GB'])).toBe(1);
+    expect(matchLocale('en-US__', ['ru-RU', '+++en', 'en-GB'])).toBe(1);
+    expect(matchLocale('en-US__', ['ru-RU', 'en+++', 'en-GB'])).toBe(1);
   });
 
   test('ignores consequent separators', () => {
     expect(matchLocale('en__US', ['ru-RU', 'en', 'en-GB'])).toBe(1);
-    expect(matchLocale('en__US', ['ru-RU', '++++en', 'en-GB'])).toBe(1);
-    expect(matchLocale('en__US', ['ru-RU', 'en++++', 'en-GB'])).toBe(1);
-    expect(matchLocale('en__US', ['ru-RU', 'en++++US', 'en-GB'])).toBe(1);
-    expect(matchLocale('en__US', ['ru-RU', '++++en++++US', 'en-GB'])).toBe(1);
-    expect(matchLocale('en__US', ['ru-RU', 'en++++US++++', 'en-GB'])).toBe(1);
+    expect(matchLocale('en__US', ['ru-RU', '+++en', 'en-GB'])).toBe(1);
+    expect(matchLocale('en__US', ['ru-RU', 'en+++', 'en-GB'])).toBe(1);
+    expect(matchLocale('en__US', ['ru-RU', 'en+++US', 'en-GB'])).toBe(1);
+    expect(matchLocale('en__US', ['ru-RU', '+++en+++US', 'en-GB'])).toBe(1);
+    expect(matchLocale('en__US', ['ru-RU', 'en+++US+++', 'en-GB'])).toBe(1);
   });
 
   test('does not cross-match subtags', () => {
     expect(matchLocale('en-US', ['enUS'])).toBe(-1);
     expect(matchLocale('en-US', ['enU-S'])).toBe(-1);
-    expect(matchLocale('__en-US', ['++++enU-S'])).toBe(-1);
+    expect(matchLocale('__en-US', ['+++enU-S'])).toBe(-1);
+  });
+
+  test('matches empty strings', () => {
+    expect(matchLocale('', ['en', '', 'ru-RU'])).toBe(1);
+    expect(matchLocale('+++', ['en', '', 'ru-RU'])).toBe(1);
+    expect(matchLocale('+++', ['en', '+++', 'ru-RU'])).toBe(1);
+    expect(matchLocale('', ['en', '+++', 'ru-RU'])).toBe(1);
   });
 });
