@@ -1,7 +1,7 @@
 # locale-matcher [![build](https://github.com/smikhalevski/locale-matcher/actions/workflows/master.yml/badge.svg?branch=master&event=push)](https://github.com/smikhalevski/locale-matcher/actions/workflows/master.yml)
 
 [Super-fast](#performance) locale matcher and normalizer in
-[just 600 bytes gzipped](https://bundlephobia.com/package/locale-matcher).
+[just 2 kB gzipped](https://bundlephobia.com/package/locale-matcher).
 
 ```shell
 npm install --save-prod locale-matcher
