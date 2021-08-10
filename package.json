@@ -50,6 +50,7 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@smikhalevski/perf-test": "^1.0.0",
     "@types/jest": "^26.0.23",
+    "chalk": "^4.1.2",
     "jest": "^27.0.2",
     "rollup": "^2.50.5",
     "terser": "^5.7.0",

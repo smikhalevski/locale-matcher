@@ -26,6 +26,9 @@ describe('matchLocale', () => {
     expect(matchLocale('rus-RU', ['ru'])).toBe(0);
     expect(matchLocale('rus-RU', ['rus'])).toBe(0);
     expect(matchLocale('ru-RU', ['rus'])).toBe(0);
+
+    expect(matchLocale('chi', ['zh'])).toBe(0);
+    expect(matchLocale('zh', ['chi'])).toBe(0);
   });
 
   test('matches exact locale with ISO 639-1 language code', () => {
