@@ -125,7 +125,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
     }
 
     if (supportedSubtagCount === matchSubtagCount) {
-      // The same number of subtags is the same, so prefer the shorter locale
+      // The number of subtags is the same, so prefer the shorter locale
 
       while (j < supportedLength) {
         if (lowerCharCodeAt(supportedLocale, j) !== -1) {
@@ -157,7 +157,7 @@ function searchIso6391Language(locale: string, offset: number): string | undefin
 
   const node = searchTrie(languageTrieNode, locale, offset, lowerCharCodeAt);
 
-  if (node != null && (locale.length === languageEnd || lowerCharCodeAt(locale, languageEnd) === -1)) {
+  if (node != null && (localeLength === languageEnd || lowerCharCodeAt(locale, languageEnd) === -1)) {
     return node.value;
   }
 }

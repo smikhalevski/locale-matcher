@@ -208,10 +208,10 @@ const languageMap = {
 };
 
 /**
- * The trie root that maps language codes from ISO 639-2 to ISO 639-1.
+ * The trie root that maps language codes from ISO 639-X to ISO 639-1.
  */
 export const languageTrieNode = createTrieNode<string>();
 
-for (const [iso6392, iso6391] of Object.entries(languageMap)) {
-  setTrie(languageTrieNode, iso6392, iso6391);
+for (const [iso639x, iso6391] of Object.entries(languageMap)) {
+  setTrie(languageTrieNode, iso639x, iso6391);
 }
