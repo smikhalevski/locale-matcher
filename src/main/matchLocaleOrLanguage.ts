@@ -1,4 +1,6 @@
 import {lowerCharCodeAt} from './lowerCharCodeAt';
+import {searchTrie} from '@smikhalevski/trie';
+import {languageTrieNode} from './languageTrieNode';
 
 /**
  * The locale/language matching algorithm implementation.
@@ -10,6 +12,18 @@ import {lowerCharCodeAt} from './lowerCharCodeAt';
 export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales: Array<string>): number {
   const requestedLength = requestedLocale.length;
 
+  let initialI = 0;
+
+  while (initialI < requestedLength && lowerCharCodeAt(requestedLocale, initialI) === -1) {
+    ++initialI;
+  }
+
+  const requestedIso6391Language = searchIso6391Language(requestedLocale, initialI);
+
+  if (requestedIso6391Language != null) {
+    ++initialI;
+  }
+
   let matchAlphaLength = 1 / 0;
   let matchSubtagCount = 1;
   let matchIndex = -1;
@@ -19,44 +33,64 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
     const supportedLocale = supportedLocales[k];
     const supportedLength = supportedLocale.length;
 
-    let i = 0;
-    let j = 0;
+    let initialJ = 0;
 
-    let supportedSubtagIndex = -1;
+    while (initialJ < supportedLength && lowerCharCodeAt(supportedLocale, initialJ) === -1) {
+      ++initialJ;
+    }
+
+    const supportedIso6391Language = searchIso6391Language(supportedLocale, initialJ);
+
+    if (supportedIso6391Language != null) {
+      ++initialJ;
+    }
+
+    let i = initialI;
+    let j = initialJ;
+
     let requestedSubtagIndex = -1;
+    let supportedSubtagIndex = -1;
 
-    let supportedCharCode = -1;
     let requestedCharCode = -1;
+    let supportedCharCode = -1;
 
-    let supportedEnded;
     let requestedEnded;
+    let supportedEnded;
 
     // The number of alpha characters in supported locale
     let supportedAlphaLength = 0;
 
     while (true) {
 
-      let supportedSubtagSeparated = false;
       let requestedSubtagSeparated = false;
+      let supportedSubtagSeparated = false;
 
-      if (i < supportedLength) {
+      if (i < requestedLength) {
         do {
-          supportedCharCode = lowerCharCodeAt(supportedLocale, i);
-          supportedSubtagSeparated ||= supportedCharCode === -1;
-          ++i;
-        } while (supportedCharCode === -1 && i < supportedLength);
-      } else {
-        supportedCharCode = -1;
-      }
-
-      if (j < requestedLength) {
-        do {
-          requestedCharCode = lowerCharCodeAt(requestedLocale, j);
+          if (requestedIso6391Language != null && i < initialI + 2) {
+            requestedCharCode = requestedIso6391Language.charCodeAt(i - initialI);
+          } else {
+            requestedCharCode = lowerCharCodeAt(requestedLocale, i);
+          }
           requestedSubtagSeparated ||= requestedCharCode === -1;
-          ++j;
-        } while (requestedCharCode === -1 && j < requestedLength);
+          ++i;
+        } while (requestedCharCode === -1 && i < requestedLength);
       } else {
         requestedCharCode = -1;
+      }
+
+      if (j < supportedLength) {
+        do {
+          if (supportedIso6391Language != null && j < initialJ + 2) {
+            supportedCharCode = supportedIso6391Language.charCodeAt(j - initialJ);
+          } else {
+            supportedCharCode = lowerCharCodeAt(supportedLocale, j);
+          }
+          supportedSubtagSeparated ||= supportedCharCode === -1;
+          ++j;
+        } while (supportedCharCode === -1 && j < supportedLength);
+      } else {
+        supportedCharCode = -1;
       }
 
       supportedEnded = supportedCharCode === -1;
@@ -93,11 +127,11 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
     if (supportedSubtagCount === matchSubtagCount) {
       // The same number of subtags is the same, so prefer the shorter locale
 
-      while (i < supportedLength) {
-        if (lowerCharCodeAt(supportedLocale, i) !== -1) {
+      while (j < supportedLength) {
+        if (lowerCharCodeAt(supportedLocale, j) !== -1) {
           ++supportedAlphaLength;
         }
-        ++i;
+        ++j;
       }
 
       if (supportedAlphaLength >= matchAlphaLength) {
@@ -111,4 +145,19 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
   }
 
   return matchIndex;
+}
+
+function searchIso6391Language(locale: string, offset: number): string | undefined {
+  const localeLength = locale.length;
+  const languageEnd = offset + 3;
+
+  if (localeLength < languageEnd || lowerCharCodeAt(locale, languageEnd - 1) === -1) {
+    return;
+  }
+
+  const node = searchTrie(languageTrieNode, locale, offset, lowerCharCodeAt);
+
+  if (node != null && (locale.length === languageEnd || lowerCharCodeAt(locale, languageEnd) === -1)) {
+    return node.value;
+  }
 }

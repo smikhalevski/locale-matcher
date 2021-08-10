@@ -2,6 +2,32 @@ import {matchLocale} from '../main/matchLocale';
 
 describe('matchLocale', () => {
 
+  test('matches ISO 639-2', () => {
+    expect(matchLocale('rus', ['ru'])).toBe(0);
+    expect(matchLocale('rus', ['rus'])).toBe(0);
+    expect(matchLocale('ru', ['rus'])).toBe(0);
+
+    expect(matchLocale('+++rus', ['ru+++'])).toBe(0);
+    expect(matchLocale('+++rus', ['rus+++'])).toBe(0);
+    expect(matchLocale('+++ru', ['rus+++'])).toBe(0);
+
+    expect(matchLocale('rus-RU', ['ru-RU'])).toBe(0);
+    expect(matchLocale('rus-RU', ['rus-RU'])).toBe(0);
+    expect(matchLocale('ru-RU', ['rus-RU'])).toBe(0);
+
+    expect(matchLocale('rus', ['ru-RU'])).toBe(0);
+    expect(matchLocale('rus', ['rus-RU'])).toBe(0);
+    expect(matchLocale('ru', ['rus-RU'])).toBe(0);
+
+    expect(matchLocale('rus', ['ru-RU', 'rus'])).toBe(1);
+    expect(matchLocale('rus', ['rus-RU', 'rus'])).toBe(1);
+    expect(matchLocale('ru', ['rus-RU', 'rus'])).toBe(1);
+
+    expect(matchLocale('rus-RU', ['ru'])).toBe(0);
+    expect(matchLocale('rus-RU', ['rus'])).toBe(0);
+    expect(matchLocale('ru-RU', ['rus'])).toBe(0);
+  });
+
   test('matches exact locale with ISO 639-1 language code', () => {
     expect(matchLocale('en', ['en_US', 'en', 'ru'])).toBe(1);
     expect(matchLocale('en_GB', ['en_US', 'en', 'en_GB', 'ru'])).toBe(2);

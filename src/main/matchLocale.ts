@@ -4,9 +4,9 @@ import {matchLocaleOrLanguage} from './matchLocaleOrLanguage';
  * Looks up a locale among `supportedLocales` that matches a `requestedLocale`.
  *
  * ```ts
- * matchLocale('en_US', ['en_AU', 'en_GB', 'en', 'ru']); // → 2
+ * matchLocale('en-US', ['en-AU', 'en-GB', 'en', 'ru']); // → 2
  *
- * matchLocale(['pt', 'en_US'], ['en_AU', 'en_GB', 'en', 'ru']); // → 2
+ * matchLocale(['pt', 'en-US'], ['en-AU', 'en-GB', 'en', 'ru']); // → 2
  * ```
  *
  * @param requestedLocales The locale or the list of locales to match.
