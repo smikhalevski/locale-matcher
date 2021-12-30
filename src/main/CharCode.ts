@@ -1,3 +1,4 @@
+// This enum isn't imported in compiled code.
 export const enum CharCode {
   'A' = 65,
   'Z' = 90,
