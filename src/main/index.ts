@@ -1,4 +1,4 @@
-export * from './matchLocale';
-export * from './matchLocaleOrLanguage';
-export * from './normalizeLocale';
-export * from './pickLocale';
+export { matchLocale } from './matchLocale';
+export { matchLocaleOrLanguage } from './matchLocaleOrLanguage';
+export { normalizeLocale } from './normalizeLocale';
+export { pickLocale } from './pickLocale';

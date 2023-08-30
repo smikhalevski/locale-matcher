@@ -1,7 +1,6 @@
-import {normalizeLocale} from '../main/normalizeLocale';
+import { normalizeLocale } from '../main';
 
 describe('normalizeLocale', () => {
-
   test('normalizes locale', () => {
     expect(normalizeLocale('__HE/il-u-ca-hebrew+tz/jeruslm**')).toBe('he-il-u-ca-hebrew-tz-jeruslm');
   });

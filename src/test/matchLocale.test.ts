@@ -1,7 +1,6 @@
-import {matchLocale} from '../main/matchLocale';
+import { matchLocale } from '../main';
 
 describe('matchLocale', () => {
-
   test('matches ISO 639-2', () => {
     expect(matchLocale('rus', ['ru'])).toBe(0);
     expect(matchLocale('rus', ['rus'])).toBe(0);
@@ -11,10 +10,12 @@ describe('matchLocale', () => {
     expect(matchLocale('+++rus', ['rus+++'])).toBe(0);
     expect(matchLocale('+++ru', ['rus+++'])).toBe(0);
 
+    expect(matchLocale('RUS-ru', ['ru-RU'])).toBe(0);
     expect(matchLocale('rus-RU', ['ru-RU'])).toBe(0);
     expect(matchLocale('rus-RU', ['rus-RU'])).toBe(0);
     expect(matchLocale('ru-RU', ['rus-RU'])).toBe(0);
 
+    expect(matchLocale('RUS', ['ru-RU'])).toBe(0);
     expect(matchLocale('rus', ['ru-RU'])).toBe(0);
     expect(matchLocale('rus', ['rus-RU'])).toBe(0);
     expect(matchLocale('ru', ['rus-RU'])).toBe(0);
