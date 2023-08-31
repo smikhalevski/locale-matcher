@@ -1,10 +1,5 @@
 import { lowerCharCodeAt } from './lowerCharCodeAt';
-import languagesTrie from './gen/languages-trie';
-import { createSearchEncoded, Match } from '@smikhalevski/trie';
-
-const searchTrie = createSearchEncoded(lowerCharCodeAt);
-
-const match: Match = { value: '', lastIndex: 0 };
+import searchLanguage from './gen/languages-trie';
 
 /**
  * The locale/language matching algorithm implementation.
@@ -14,6 +9,12 @@ const match: Match = { value: '', lastIndex: 0 };
  * @returns An index of locale in `locales` or -1 if no locale matched.
  */
 export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales: string[]): number {
+  const exactIndex = supportedLocales.indexOf(requestedLocale);
+
+  if (exactIndex !== -1) {
+    return exactIndex;
+  }
+
   const requestedLength = requestedLocale.length;
 
   let initialI = 0;
@@ -153,15 +154,17 @@ function searchISO6391Language(locale: string, offset: number): string | null {
   const localeLength = locale.length;
   const languageEnd = offset + 3;
 
+  let language;
+
   if (localeLength < languageEnd || lowerCharCodeAt(locale, languageEnd - 1) === -1) {
     return null;
   }
 
   if (
     (localeLength === languageEnd || lowerCharCodeAt(locale, languageEnd) === -1) &&
-    searchTrie(languagesTrie, locale, offset, locale.length, match) !== null
+    (language = searchLanguage(locale, offset)) !== 0
   ) {
-    return match.value;
+    return language;
   }
   return null;
 }

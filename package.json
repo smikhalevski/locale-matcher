@@ -10,7 +10,7 @@
     "build": "npm run gen-language-trie && tsc --project tsconfig.build.json && rollup --config && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
     "gen-language-trie": "node src/scripts/gen-language-trie.js",
     "clean": "rimraf gen lib docs coverage",
-    "test": "jest",
+    "test": "npm run gen-language-trie && jest",
     "perf": "toofast"
   },
   "repository": {
