@@ -1,18 +1,34 @@
-const chalk = require('chalk');
-const {test} = require('@smikhalevski/perf-test');
-const {match: formatjsMatch} = require('@formatjs/intl-localematcher');
-const {pickLocale} = require('../../lib/index-cjs');
+const { match } = require('@formatjs/intl-localematcher');
+const { pickLocale } = require('../../lib');
 
-const requestedLocalesIso6391 = ['ru-RU'];
-const requestedLocalesIso6392 = ['rus-RU'];
+const requestedLocalesISO6391 = ['ru-RU'];
+const requestedLocalesISO6392 = ['rus-RU'];
 const supportedLocales = ['en-GB', 'ru', 'cz', 'ru-RU'];
 
-console.log(chalk.bold.inverse(' ISO 639-1 ') + '\n');
+describe('ISO 639-1', () => {
+  test('intl-localematcher', measure => {
+    measure(() => {
+      match(requestedLocalesISO6391, supportedLocales, 'ru');
+    });
+  });
 
-test('locale-matcher              ', () => pickLocale(requestedLocalesIso6391, supportedLocales), {timeout: 10000});
-test('@formatjs/intl-localematcher', () => formatjsMatch(requestedLocalesIso6391, supportedLocales), {timeout: 10000});
+  test('locale-matcher', measure => {
+    measure(() => {
+      pickLocale(requestedLocalesISO6391, supportedLocales);
+    });
+  });
+});
 
-console.log('\n\n' + chalk.bold.inverse(' ISO 639-2 ') + '\n');
+describe('ISO 639-2', () => {
+  test('intl-localematcher', measure => {
+    measure(() => {
+      match(requestedLocalesISO6392, supportedLocales, 'ru');
+    });
+  });
 
-test('locale-matcher              ', () => pickLocale(requestedLocalesIso6392, supportedLocales), {timeout: 10000});
-test('@formatjs/intl-localematcher', () => formatjsMatch(requestedLocalesIso6392, supportedLocales), {timeout: 10000});
+  test('locale-matcher', measure => {
+    measure(() => {
+      pickLocale(requestedLocalesISO6392, supportedLocales);
+    });
+  });
+});

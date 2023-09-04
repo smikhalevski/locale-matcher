@@ -1,6 +1,5 @@
-import {lowerCharCodeAt} from './lowerCharCodeAt';
-import {searchTrie} from '@smikhalevski/trie';
-import {languageTrieNode} from './languageTrieNode';
+import { lowerCharCodeAt } from './lowerCharCodeAt';
+import searchLanguage from './gen/languages-trie';
 
 /**
  * The locale/language matching algorithm implementation.
@@ -9,7 +8,13 @@ import {languageTrieNode} from './languageTrieNode';
  * @param supportedLocales The list of supported locales.
  * @returns An index of locale in `locales` or -1 if no locale matched.
  */
-export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales: Array<string>): number {
+export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales: string[]): number {
+  const exactIndex = supportedLocales.indexOf(requestedLocale);
+
+  if (exactIndex !== -1) {
+    return exactIndex;
+  }
+
   const requestedLength = requestedLocale.length;
 
   let initialI = 0;
@@ -18,9 +23,9 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
     ++initialI;
   }
 
-  const requestedIso6391Language = searchIso6391Language(requestedLocale, initialI);
+  const requestedISO6391Language = searchISO6391Language(requestedLocale, initialI);
 
-  if (requestedIso6391Language != null) {
+  if (requestedISO6391Language !== null) {
     ++initialI;
   }
 
@@ -29,7 +34,6 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
   let matchIndex = -1;
 
   for (let k = 0; k < supportedLocales.length; ++k) {
-
     const supportedLocale = supportedLocales[k];
     const supportedLength = supportedLocale.length;
 
@@ -39,9 +43,9 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
       ++initialJ;
     }
 
-    const supportedIso6391Language = searchIso6391Language(supportedLocale, initialJ);
+    const supportedISO6391Language = searchISO6391Language(supportedLocale, initialJ);
 
-    if (supportedIso6391Language != null) {
+    if (supportedISO6391Language !== null) {
       ++initialJ;
     }
 
@@ -61,14 +65,13 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
     let supportedAlphaLength = 0;
 
     while (true) {
-
       let requestedSubtagSeparated = false;
       let supportedSubtagSeparated = false;
 
       if (i < requestedLength) {
         do {
-          if (requestedIso6391Language != null && i < initialI + 2) {
-            requestedCharCode = requestedIso6391Language.charCodeAt(i - initialI);
+          if (requestedISO6391Language !== null && i < initialI + 2) {
+            requestedCharCode = requestedISO6391Language.charCodeAt(i - initialI);
           } else {
             requestedCharCode = lowerCharCodeAt(requestedLocale, i);
           }
@@ -81,8 +84,8 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
 
       if (j < supportedLength) {
         do {
-          if (supportedIso6391Language != null && j < initialJ + 2) {
-            supportedCharCode = supportedIso6391Language.charCodeAt(j - initialJ);
+          if (supportedISO6391Language !== null && j < initialJ + 2) {
+            supportedCharCode = supportedISO6391Language.charCodeAt(j - initialJ);
           } else {
             supportedCharCode = lowerCharCodeAt(supportedLocale, j);
           }
@@ -147,17 +150,21 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
   return matchIndex;
 }
 
-function searchIso6391Language(locale: string, offset: number): string | undefined {
+function searchISO6391Language(locale: string, offset: number): string | null {
   const localeLength = locale.length;
   const languageEnd = offset + 3;
 
+  let language;
+
   if (localeLength < languageEnd || lowerCharCodeAt(locale, languageEnd - 1) === -1) {
-    return;
+    return null;
   }
 
-  const node = searchTrie(languageTrieNode, locale, offset, lowerCharCodeAt);
-
-  if (node != null && (localeLength === languageEnd || lowerCharCodeAt(locale, languageEnd) === -1)) {
-    return node.value;
+  if (
+    (localeLength === languageEnd || lowerCharCodeAt(locale, languageEnd) === -1) &&
+    (language = searchLanguage(locale, offset)) !== 0
+  ) {
+    return language;
   }
+  return null;
 }

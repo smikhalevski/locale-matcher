@@ -1,9 +1,10 @@
-import {lowerCharCodeAt} from './lowerCharCodeAt';
+import { lowerCharCodeAt } from './lowerCharCodeAt';
+
+const fromCharCode = String.fromCharCode;
 
 const SUBTAG_SEPARATOR = '-';
 
 export function normalizeLocale(locale: string): string {
-
   let normalizedLocale = '';
   let lastCharCode = -1;
 
@@ -14,7 +15,7 @@ export function normalizeLocale(locale: string): string {
       if (lastCharCode === -1 && normalizedLocale.length !== 0) {
         normalizedLocale += SUBTAG_SEPARATOR;
       }
-      normalizedLocale += String.fromCharCode(charCode);
+      normalizedLocale += fromCharCode(charCode);
     }
     lastCharCode = charCode;
   }

@@ -1,4 +1,4 @@
-import {matchLocaleOrLanguage} from './matchLocaleOrLanguage';
+import { matchLocaleOrLanguage } from './matchLocaleOrLanguage';
 
 /**
  * Looks up a locale among `supportedLocales` that matches a `requestedLocale`.
@@ -13,8 +13,7 @@ import {matchLocaleOrLanguage} from './matchLocaleOrLanguage';
  * @param supportedLocales The list of supported locales.
  * @returns An index of locale in `locales` or -1 if no locale matched.
  */
-export function matchLocale(requestedLocales: Array<string> | string, supportedLocales: Array<string>): number {
-
+export function matchLocale(requestedLocales: string[] | string, supportedLocales: string[]): number {
   if (typeof requestedLocales === 'string') {
     return matchLocaleOrLanguage(requestedLocales, supportedLocales);
   }
