@@ -42,9 +42,20 @@ properly.
 
 # Performance
 
-Clone this repo and use `npm ci && npm run perf` to run the performance test suite.
+Execution performance is measured in operations per second (± 5%), the higher number is better.
+Memory consumption (RAM) is measured in bytes, the lower number is better.
 
-|  | Ops/sec |
-| --- | ---: | 
-| locale-matcher | 4,250,838 |
-| [@formatjs/intl-localematcher](https://formatjs.io/docs/polyfills/intl-localematcher/) | 20,089 |
+|                                                                                        |       Ops/sec |       RAM |
+|----------------------------------------------------------------------------------------|--------------:|----------:|
+| locale-matcher                                                                         | **8,500 kHz** |  **90 B** |
+| [@formatjs/intl-localematcher](https://formatjs.io/docs/polyfills/intl-localematcher/) |         2 kHz | 357,000 B |
+
+Tests were conducted using [TooFast](https://github.com/smikhalevski/toofast#readme) on Apple M1 with Node.js v23.1.0.
+
+To reproduce [the performance test suite](./src/test/index.perf.js) results, clone this repo and run:
+
+```shell
+npm ci
+npm run build
+npm run perf
+```
