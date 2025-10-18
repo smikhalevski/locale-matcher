@@ -2,17 +2,18 @@
   "name": "locale-matcher",
   "version": "2.0.0",
   "description": "Super-fast and tiny locale matcher.",
+  "type": "module",
   "main": "./index.js",
-  "module": "./index.mjs",
   "types": "./index.d.ts",
-  "sideEffects": false,
   "scripts": {
-    "build": "npm run gen-language-trie && tsc --project tsconfig.build.json && rollup --config && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
-    "gen-language-trie": "node src/scripts/gen-language-trie.js",
-    "clean": "rimraf gen lib docs coverage",
-    "test": "npm run gen-language-trie && jest",
-    "perf": "toofast"
+    "build": "tsc --project tsconfig.build.json && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
+    "clean": "rimraf lib docs coverage",
+    "test": "TZ=UTC vitest run",
+    "perf": "toofast",
+    "docs": "typedoc",
+    "gen-language-trie": "node src/scripts/gen-language-trie.js"
   },
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smikhalevski/locale-matcher.git"
@@ -31,17 +32,11 @@
   },
   "homepage": "https://github.com/smikhalevski/locale-matcher#readme",
   "devDependencies": {
-    "@formatjs/intl-localematcher": "^0.4.0",
-    "@rollup/plugin-node-resolve": "^15.2.1",
-    "@smikhalevski/trie": "^2.2.0",
-    "@types/jest": "^29.5.4",
-    "jest": "^29.6.4",
-    "prettier": "^3.0.3",
-    "rimraf": "^5.0.1",
-    "rollup": "^3.28.1",
-    "rollup-plugin-dts": "^5.3.1",
-    "toofast": "^2.0.0",
-    "ts-jest": "^29.1.1",
-    "typescript": "^5.1.6"
+    "@formatjs/intl-localematcher": "^0.6.2",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "toofast": "^3.0.3",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   }
 }

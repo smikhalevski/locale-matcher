@@ -1,4 +1,4 @@
-import { matchLocaleOrLanguage } from './matchLocaleOrLanguage';
+import { matchLocaleOrLanguage } from './matchLocaleOrLanguage.js';
 
 /**
  * Looks up a locale among `supportedLocales` that matches a `requestedLocale`.

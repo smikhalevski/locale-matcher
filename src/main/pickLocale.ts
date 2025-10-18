@@ -1,4 +1,4 @@
-import { matchLocale } from './matchLocale';
+import { matchLocale } from './matchLocale.js';
 
 /**
  * Returns a locale from `supportedLocales` that matches `requestedLocale` or `undefined` if no locales matched.

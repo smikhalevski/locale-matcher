@@ -1,4 +1,5 @@
-import { pickLocale } from '../main';
+import { describe, test, expect } from 'vitest';
+import { pickLocale } from '../main/index.js';
 
 describe('pickLocale', () => {
   test('matches a locale', () => {

@@ -1,4 +1,5 @@
-import { matchLocale } from '../main';
+import { describe, test, expect } from 'vitest';
+import { matchLocale } from '../main/index.js';
 
 describe('matchLocale', () => {
   test('matches ISO 639-2', () => {

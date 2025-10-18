@@ -1,4 +1,5 @@
-import { normalizeLocale } from '../main';
+import { describe, test, expect } from 'vitest';
+import { normalizeLocale } from '../main/index.js';
 
 describe('normalizeLocale', () => {
   test('normalizes locale', () => {

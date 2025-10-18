@@ -1,7 +1,7 @@
 /**
- * Returns the ASCII-alpha char code at `offset` in `input`. If char isn't an ASCII-alpha than -1 is returned.
+ * Returns the ASCII-alpha char code at `index` in `str`. If char isn't an ASCII-alpha than -1 is returned.
  */
-export function lowerCharCodeAt(str: string, index: number): number {
+export function getLowerCaseCharCodeAt(str: string, index: number): number {
   const charCode = str.charCodeAt(index);
 
   if (charCode >= 65 /*A*/ && charCode <= 90 /*Z*/) {
