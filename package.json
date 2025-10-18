@@ -1,22 +1,19 @@
 {
   "name": "locale-matcher",
   "version": "2.0.0",
-  "description": "Super-fast and tiny locale matcher.",
-  "main": "./lib/index-cjs.js",
-  "module": "./lib/index.js",
-  "types": "./lib/index.d.ts",
-  "sideEffects": false,
-  "files": [
-    "lib"
-  ],
+  "description": "The super-fast locale matcher and normalizer.",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "scripts": {
-    "build": "tsc && npm run rollup && npm run terser",
-    "rollup": "rollup --external @smikhalevski/trie --input ./lib/index.js --file ./lib/index-cjs.js --format cjs --plugin @rollup/plugin-node-resolve",
-    "terser": "terser --compress --mangle toplevel --output ./lib/index-cjs.js -- ./lib/index-cjs.js",
-    "clean": "rm -rf ./lib",
-    "test": "jest --detectOpenHandles",
-    "perf": "[ -d ./lib ] || npm run build && node --expose-gc --max-old-space-size=4096 ./src/test/perf.js"
+    "build": "npm run gen-language-trie && tsc --project tsconfig.build.json && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
+    "clean": "rimraf lib docs coverage",
+    "test": "npm run gen-language-trie && TZ=UTC vitest run",
+    "perf": "toofast",
+    "docs": "typedoc",
+    "gen-language-trie": "node src/scripts/gen-language-trie.ts"
   },
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smikhalevski/locale-matcher.git"
@@ -34,31 +31,13 @@
     "url": "https://github.com/smikhalevski/locale-matcher/issues"
   },
   "homepage": "https://github.com/smikhalevski/locale-matcher#readme",
-  "jest": {
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "diagnostics": {
-          "ignoreCodes": [
-            151001
-          ]
-        }
-      }
-    }
-  },
   "devDependencies": {
-    "@formatjs/intl-localematcher": "^0.2.18",
-    "@rollup/plugin-node-resolve": "^13.0.0",
-    "@smikhalevski/perf-test": "^1.0.0",
-    "@types/jest": "^26.0.23",
-    "chalk": "^4.1.2",
-    "jest": "^27.0.2",
-    "rollup": "^2.50.5",
-    "terser": "^5.7.0",
-    "ts-jest": "^27.0.2",
-    "typescript": "^4.3.2"
-  },
-  "dependencies": {
-    "@smikhalevski/trie": "^1.0.1"
+    "@formatjs/intl-localematcher": "^0.6.2",
+    "@types/node": "^24.8.1",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "toofast": "^3.0.3",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   }
 }

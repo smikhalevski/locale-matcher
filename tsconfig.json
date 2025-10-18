@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "moduleResolution": "Node",
+    "isolatedModules": true,
     "strict": true,
-    "target": "ES5",
-    "module": "ES6",
-    "rootDir": "./src/main",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "target": "ES2020",
+    "module": "NodeNext",
+    "lib": ["ES2022"],
     "outDir": "./lib"
   },
-  "include": [
-    "./src/main/**/*"
-  ]
+  "include": ["./src/**/*"]
 }

@@ -1,4 +1,3 @@
-export * from './matchLocale';
-export * from './matchLocaleOrLanguage';
-export * from './normalizeLocale';
-export * from './pickLocale';
+export { matchLocale } from './matchLocale.js';
+export { normalizeLocale } from './normalizeLocale.js';
+export { pickLocale } from './pickLocale.js';

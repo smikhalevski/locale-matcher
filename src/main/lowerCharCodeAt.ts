@@ -1,15 +1,13 @@
-import {CharCode} from './CharCode';
-
 /**
- * Returns the ASCII-alpha char code at `offset` in `input`. If char isn't an ASCII-alpha than -1 is returned.
+ * Returns the ASCII-alpha char code at `index` in `str`. If char isn't an ASCII-alpha than -1 is returned.
  */
-export function lowerCharCodeAt(input: string, offset: number): number {
-  const charCode = input.charCodeAt(offset);
+export function lowerCharCodeAt(str: string, index: number): number {
+  const charCode = str.charCodeAt(index);
 
-  if (charCode >= CharCode['A'] && charCode <= CharCode['Z']) {
-    return charCode - CharCode['A'] + CharCode['a'];
+  if (charCode >= /* A */ 65 && charCode <= /* Z */ 90) {
+    return charCode - /* A */ 65 + /* a */ 97;
   }
-  if (charCode >= CharCode['a'] && charCode <= CharCode['z']) {
+  if (charCode >= /* a */ 97 && charCode <= /* z */ 122) {
     return charCode;
   }
 
