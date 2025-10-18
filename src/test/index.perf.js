@@ -1,34 +1,35 @@
-const { match } = require('@formatjs/intl-localematcher');
-const { pickLocale } = require('../../lib');
+import { describe, test, measure } from 'toofast';
+import * as formatjs from '@formatjs/intl-localematcher';
+import * as localeMatcher from '../../lib/index.js';
 
 const requestedLocalesISO6391 = ['ru-RU'];
 const requestedLocalesISO6392 = ['rus-RU'];
 const supportedLocales = ['en-GB', 'ru', 'cz', 'ru-RU'];
 
 describe('ISO 639-1', () => {
-  test('intl-localematcher', measure => {
+  test('@formatjs/intl-localematcher', () => {
     measure(() => {
-      match(requestedLocalesISO6391, supportedLocales, 'ru');
+      formatjs.match(requestedLocalesISO6391, supportedLocales, 'ru');
     });
   });
 
-  test('locale-matcher', measure => {
+  test('locale-matcher', () => {
     measure(() => {
-      pickLocale(requestedLocalesISO6391, supportedLocales);
+      localeMatcher.pickLocale(requestedLocalesISO6391, supportedLocales);
     });
   });
 });
 
 describe('ISO 639-2', () => {
-  test('intl-localematcher', measure => {
+  test('@formatjs/intl-localematcher', () => {
     measure(() => {
-      match(requestedLocalesISO6392, supportedLocales, 'ru');
+      formatjs.match(requestedLocalesISO6392, supportedLocales, 'ru');
     });
   });
 
-  test('locale-matcher', measure => {
+  test('locale-matcher', () => {
     measure(() => {
-      pickLocale(requestedLocalesISO6392, supportedLocales);
+      localeMatcher.pickLocale(requestedLocalesISO6392, supportedLocales);
     });
   });
 });

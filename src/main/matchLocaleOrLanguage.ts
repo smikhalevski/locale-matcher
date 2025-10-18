@@ -1,5 +1,5 @@
-import { getLowerCaseCharCodeAt } from './getLowerCaseCharCodeAt.js';
-import searchLanguage from './gen/languages-trie.js';
+import { lowerCharCodeAt } from './lowerCharCodeAt.js';
+import searchISO6391Language from './gen/languages-trie.js';
 
 /**
  * The locale/language matching algorithm implementation.
@@ -19,7 +19,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
 
   let initialI = 0;
 
-  while (initialI < requestedLength && getLowerCaseCharCodeAt(requestedLocale, initialI) === -1) {
+  while (initialI < requestedLength && lowerCharCodeAt(requestedLocale, initialI) === -1) {
     ++initialI;
   }
 
@@ -39,7 +39,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
 
     let initialJ = 0;
 
-    while (initialJ < supportedLength && getLowerCaseCharCodeAt(supportedLocale, initialJ) === -1) {
+    while (initialJ < supportedLength && lowerCharCodeAt(supportedLocale, initialJ) === -1) {
       ++initialJ;
     }
 
@@ -73,7 +73,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
           if (requestedISO6391Language !== null && i < initialI + 2) {
             requestedCharCode = requestedISO6391Language.charCodeAt(i - initialI);
           } else {
-            requestedCharCode = getLowerCaseCharCodeAt(requestedLocale, i);
+            requestedCharCode = lowerCharCodeAt(requestedLocale, i);
           }
           requestedSubtagSeparated ||= requestedCharCode === -1;
           ++i;
@@ -87,7 +87,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
           if (supportedISO6391Language !== null && j < initialJ + 2) {
             supportedCharCode = supportedISO6391Language.charCodeAt(j - initialJ);
           } else {
-            supportedCharCode = getLowerCaseCharCodeAt(supportedLocale, j);
+            supportedCharCode = lowerCharCodeAt(supportedLocale, j);
           }
           supportedSubtagSeparated ||= supportedCharCode === -1;
           ++j;
@@ -131,7 +131,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
       // The number of subtags is the same, so prefer the shorter locale
 
       while (j < supportedLength) {
-        if (getLowerCaseCharCodeAt(supportedLocale, j) !== -1) {
+        if (lowerCharCodeAt(supportedLocale, j) !== -1) {
           ++supportedAlphaLength;
         }
         ++j;
@@ -148,23 +148,4 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
   }
 
   return matchIndex;
-}
-
-function searchISO6391Language(locale: string, offset: number): string | null {
-  const localeLength = locale.length;
-  const languageEnd = offset + 3;
-
-  let language;
-
-  if (localeLength < languageEnd || getLowerCaseCharCodeAt(locale, languageEnd - 1) === -1) {
-    return null;
-  }
-
-  if (
-    (localeLength === languageEnd || getLowerCaseCharCodeAt(locale, languageEnd) === -1) &&
-    (language = searchLanguage(locale, offset)) !== 0
-  ) {
-    return language;
-  }
-  return null;
 }

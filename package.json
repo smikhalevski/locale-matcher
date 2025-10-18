@@ -6,12 +6,12 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "scripts": {
-    "build": "tsc --project tsconfig.build.json && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
+    "build": "npm run gen-language-trie && tsc --project tsconfig.build.json && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
     "clean": "rimraf lib docs coverage",
-    "test": "TZ=UTC vitest run",
+    "test": "npm run gen-language-trie && TZ=UTC vitest run",
     "perf": "toofast",
     "docs": "typedoc",
-    "gen-language-trie": "node src/scripts/gen-language-trie.js"
+    "gen-language-trie": "node src/scripts/gen-language-trie.ts"
   },
   "sideEffects": false,
   "repository": {
@@ -33,6 +33,7 @@
   "homepage": "https://github.com/smikhalevski/locale-matcher#readme",
   "devDependencies": {
     "@formatjs/intl-localematcher": "^0.6.2",
+    "@types/node": "^24.8.1",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "toofast": "^3.0.3",

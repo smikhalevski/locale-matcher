@@ -1,4 +1,4 @@
-import { getLowerCaseCharCodeAt } from './getLowerCaseCharCodeAt.js';
+import { lowerCharCodeAt } from './lowerCharCodeAt.js';
 
 const fromCharCode = String.fromCharCode;
 
@@ -7,7 +7,7 @@ export function normalizeLocale(locale: string, subtagSeparator = '-'): string {
   let lastCharCode = -1;
 
   for (let i = 0; i < locale.length; ++i) {
-    const charCode = getLowerCaseCharCodeAt(locale, i);
+    const charCode = lowerCharCodeAt(locale, i);
 
     if (charCode !== -1) {
       if (lastCharCode === -1 && normalizedLocale.length !== 0) {
