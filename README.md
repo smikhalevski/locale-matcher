@@ -1,6 +1,6 @@
 # locale-matcher
 
-[Super-fast](#performance) locale matcher and normalizer in
+The [super-fast](#performance) locale matcher and normalizer in
 [just 2 kB gzipped](https://bundlephobia.com/package/locale-matcher).
 
 ```shell

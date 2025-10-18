@@ -1,7 +1,7 @@
 {
   "name": "locale-matcher",
   "version": "2.0.0",
-  "description": "Super-fast and tiny locale matcher.",
+  "description": "The super-fast locale matcher and normalizer.",
   "type": "module",
   "main": "./index.js",
   "types": "./index.d.ts",
