@@ -1,7 +1,7 @@
 # locale-matcher
 
 The [super-fast](#performance) locale matcher and normalizer in
-[just 2 kB gzipped](https://bundlephobia.com/package/locale-matcher).
+[just 2 kB gzipped](https://bundlephobia.com/package/locale-matcher) with zero dependencies.
 
 ```shell
 npm install --save-prod locale-matcher
@@ -24,7 +24,7 @@ pickLocale('hy', ['en-AU', 'en-GB', 'en', 'ru']);
 Provide a fallback locale if the requested locale isn't supported:
 
 ```ts
-pickLocale('hy', ['en', 'ru'], /*defaultLocale*/ 'en');
+pickLocale('hy', ['en', 'ru'], /* default locale */ 'en');
 // ⮕ 'en'
 ```
 
@@ -40,7 +40,7 @@ Get the index of the supported locale that best matches the requested one:
 ```ts
 import { matchLocale } from 'locale-matcher';
 
-matchLocale(/* requestedLocale */ 'en-US', /* supportedLocales */ ['en-AU', 'en-GB', 'en', 'ru']);
+matchLocale(/* requested locale */ 'en-US', /* supported locales */ ['en-AU', 'en-GB', 'en', 'ru']);
 // ⮕ 2
 
 matchLocale('hy', ['en-AU', 'en-GB', 'en', 'ru']);
