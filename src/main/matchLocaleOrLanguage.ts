@@ -1,12 +1,11 @@
-import { lowerCharCodeAt } from './lowerCharCodeAt.js';
-import searchISO6391Language from './gen/languages-trie.js';
+import { getAlpha2ByAlpha3LanguageAt, getAlphaCodeAt } from './utils.js';
 
 /**
  * The locale/language matching algorithm implementation.
  *
  * @param requestedLocale The locale to match.
  * @param supportedLocales The list of supported locales.
- * @returns An index of locale in `locales` or -1 if no locale matched.
+ * @returns An index of requested locale in `supportedLocales` or -1 if no locale was matched.
  */
 export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales: string[]): number {
   const exactIndex = supportedLocales.indexOf(requestedLocale);
@@ -19,13 +18,13 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
 
   let initialI = 0;
 
-  while (initialI < requestedLength && lowerCharCodeAt(requestedLocale, initialI) === -1) {
+  while (initialI < requestedLength && getAlphaCodeAt(requestedLocale, initialI) === -1) {
     ++initialI;
   }
 
-  const requestedISO6391Language = searchISO6391Language(requestedLocale, initialI);
+  const requestedAlpha2Language = getAlpha2ByAlpha3LanguageAt(requestedLocale, initialI);
 
-  if (requestedISO6391Language !== null) {
+  if (requestedAlpha2Language !== undefined) {
     ++initialI;
   }
 
@@ -39,13 +38,13 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
 
     let initialJ = 0;
 
-    while (initialJ < supportedLength && lowerCharCodeAt(supportedLocale, initialJ) === -1) {
+    while (initialJ < supportedLength && getAlphaCodeAt(supportedLocale, initialJ) === -1) {
       ++initialJ;
     }
 
-    const supportedISO6391Language = searchISO6391Language(supportedLocale, initialJ);
+    const supportedAlpha2Language = getAlpha2ByAlpha3LanguageAt(supportedLocale, initialJ);
 
-    if (supportedISO6391Language !== null) {
+    if (supportedAlpha2Language !== undefined) {
       ++initialJ;
     }
 
@@ -58,24 +57,24 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
     let requestedCharCode = -1;
     let supportedCharCode = -1;
 
-    let requestedEnded;
-    let supportedEnded;
+    let isRequestedEnded;
+    let isSupportedEnded;
 
     // The number of alpha characters in supported locale
     let supportedAlphaLength = 0;
 
     while (true) {
-      let requestedSubtagSeparated = false;
-      let supportedSubtagSeparated = false;
+      let isRequestedSubtagSeparated = false;
+      let isSupportedSubtagSeparated = false;
 
       if (i < requestedLength) {
         do {
-          if (requestedISO6391Language !== null && i < initialI + 2) {
-            requestedCharCode = requestedISO6391Language.charCodeAt(i - initialI);
+          if (requestedAlpha2Language !== undefined && i < initialI + 2) {
+            requestedCharCode = requestedAlpha2Language.charCodeAt(i - initialI);
           } else {
-            requestedCharCode = lowerCharCodeAt(requestedLocale, i);
+            requestedCharCode = getAlphaCodeAt(requestedLocale, i);
           }
-          requestedSubtagSeparated ||= requestedCharCode === -1;
+          isRequestedSubtagSeparated ||= requestedCharCode === -1;
           ++i;
         } while (requestedCharCode === -1 && i < requestedLength);
       } else {
@@ -84,44 +83,44 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
 
       if (j < supportedLength) {
         do {
-          if (supportedISO6391Language !== null && j < initialJ + 2) {
-            supportedCharCode = supportedISO6391Language.charCodeAt(j - initialJ);
+          if (supportedAlpha2Language !== undefined && j < initialJ + 2) {
+            supportedCharCode = supportedAlpha2Language.charCodeAt(j - initialJ);
           } else {
-            supportedCharCode = lowerCharCodeAt(supportedLocale, j);
+            supportedCharCode = getAlphaCodeAt(supportedLocale, j);
           }
-          supportedSubtagSeparated ||= supportedCharCode === -1;
+          isSupportedSubtagSeparated ||= supportedCharCode === -1;
           ++j;
         } while (supportedCharCode === -1 && j < supportedLength);
       } else {
         supportedCharCode = -1;
       }
 
-      supportedEnded = supportedCharCode === -1;
-      requestedEnded = requestedCharCode === -1;
+      isSupportedEnded = supportedCharCode === -1;
+      isRequestedEnded = requestedCharCode === -1;
 
-      if (!supportedEnded) {
+      if (!isSupportedEnded) {
         ++supportedAlphaLength;
       }
 
-      if (supportedSubtagIndex === -1 || supportedSubtagSeparated) {
+      if (supportedSubtagIndex === -1 || isSupportedSubtagSeparated) {
         ++supportedSubtagIndex;
       }
 
-      if (requestedSubtagIndex === -1 || requestedSubtagSeparated) {
+      if (requestedSubtagIndex === -1 || isRequestedSubtagSeparated) {
         ++requestedSubtagIndex;
       }
 
       if (supportedSubtagIndex !== requestedSubtagIndex || supportedCharCode !== requestedCharCode) {
         break;
       }
-      if (supportedEnded && requestedEnded) {
+      if (isSupportedEnded && isRequestedEnded) {
         return k;
       }
     }
 
     // The number of matched subtags
-    const requestedSubtagCount = requestedEnded ? requestedSubtagIndex + 1 : requestedSubtagIndex;
-    const supportedSubtagCount = supportedEnded ? supportedSubtagIndex + 1 : supportedSubtagIndex;
+    const requestedSubtagCount = isRequestedEnded ? requestedSubtagIndex + 1 : requestedSubtagIndex;
+    const supportedSubtagCount = isSupportedEnded ? supportedSubtagIndex + 1 : supportedSubtagIndex;
 
     if (requestedSubtagCount === 0 || supportedSubtagCount < matchSubtagCount) {
       continue;
@@ -131,7 +130,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
       // The number of subtags is the same, so prefer the shorter locale
 
       while (j < supportedLength) {
-        if (lowerCharCodeAt(supportedLocale, j) !== -1) {
+        if (getAlphaCodeAt(supportedLocale, j) !== -1) {
           ++supportedAlphaLength;
         }
         ++j;

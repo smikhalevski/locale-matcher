@@ -2,34 +2,34 @@ import { describe, test, measure } from 'toofast';
 import * as formatjs from '@formatjs/intl-localematcher';
 import * as localeMatcher from '../../lib/index.js';
 
-const requestedLocalesISO6391 = ['ru-RU'];
-const requestedLocalesISO6392 = ['rus-RU'];
+const requestedAlpha2Locales = ['ru-RU'];
+const requestedAlpha3Locales = ['rus-RU'];
 const supportedLocales = ['en-GB', 'ru', 'cz', 'ru-RU'];
 
-describe('ISO 639-1', () => {
+describe('ISO 639-1 (alpha2)', () => {
   test('@formatjs/intl-localematcher', () => {
     measure(() => {
-      formatjs.match(requestedLocalesISO6391, supportedLocales, 'ru');
+      formatjs.match(requestedAlpha2Locales, supportedLocales, 'ru');
     });
   });
 
   test('locale-matcher', () => {
     measure(() => {
-      localeMatcher.pickLocale(requestedLocalesISO6391, supportedLocales);
+      localeMatcher.pickLocale(requestedAlpha2Locales, supportedLocales);
     });
   });
 });
 
-describe('ISO 639-2', () => {
+describe('ISO 639-2 (alpha3)', () => {
   test('@formatjs/intl-localematcher', () => {
     measure(() => {
-      formatjs.match(requestedLocalesISO6392, supportedLocales, 'ru');
+      formatjs.match(requestedAlpha3Locales, supportedLocales, 'ru');
     });
   });
 
   test('locale-matcher', () => {
     measure(() => {
-      localeMatcher.pickLocale(requestedLocalesISO6392, supportedLocales);
+      localeMatcher.pickLocale(requestedAlpha3Locales, supportedLocales);
     });
   });
 });

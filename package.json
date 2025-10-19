@@ -6,12 +6,11 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "scripts": {
-    "build": "npm run gen-language-trie && tsc --project tsconfig.build.json && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
+    "build": "tsc --project tsconfig.build.json && cp package.json README.md LICENSE.txt lib/ && cd lib && npm pkg delete scripts devDependencies",
     "clean": "rimraf lib docs coverage",
-    "test": "npm run gen-language-trie && TZ=UTC vitest run",
+    "test": "vitest run",
     "perf": "toofast",
-    "docs": "typedoc",
-    "gen-language-trie": "node src/scripts/gen-language-trie.ts"
+    "docs": "typedoc"
   },
   "sideEffects": false,
   "repository": {
