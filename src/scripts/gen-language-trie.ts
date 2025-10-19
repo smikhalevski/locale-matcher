@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import languages from './languages.json' with { type: 'json' };
-import { lowerCharCodeAt } from '../main/lowerCharCodeAt.ts';
+import { getAlphaCodeAt } from '../main/utils.ts';
 
 const outDir = path.resolve(import.meta.dirname, '../main/gen');
 
@@ -19,7 +19,7 @@ function genLanguageTrie(languages: Record<string, string>): string {
   let str0 = '';
 
   for (let i = 0; i < keys.length; ++i) {
-    const charCode0 = lowerCharCodeAt(keys[i], 0);
+    const charCode0 = getAlphaCodeAt(keys[i], 0);
 
     if (visitedKeys0.has(charCode0)) {
       continue;
@@ -33,9 +33,9 @@ function genLanguageTrie(languages: Record<string, string>): string {
     let str1 = '';
 
     for (let i = 0; i < keys.length; ++i) {
-      const charCode1 = lowerCharCodeAt(keys[i], 1);
+      const charCode1 = getAlphaCodeAt(keys[i], 1);
 
-      if (lowerCharCodeAt(keys[i], 0) !== charCode0 || visitedKeys1.has(charCode1)) {
+      if (getAlphaCodeAt(keys[i], 0) !== charCode0 || visitedKeys1.has(charCode1)) {
         continue;
       }
 
@@ -47,9 +47,9 @@ function genLanguageTrie(languages: Record<string, string>): string {
       let str2 = '';
 
       for (let i = 0; i < keys.length; ++i) {
-        const charCode2 = lowerCharCodeAt(keys[i], 2);
+        const charCode2 = getAlphaCodeAt(keys[i], 2);
 
-        if (lowerCharCodeAt(keys[i], 0) !== charCode0 || lowerCharCodeAt(keys[i], 1) !== charCode1) {
+        if (getAlphaCodeAt(keys[i], 0) !== charCode0 || getAlphaCodeAt(keys[i], 1) !== charCode1) {
           continue;
         }
 
@@ -74,16 +74,16 @@ function genLanguageTrie(languages: Record<string, string>): string {
 
   str0 += 'null';
 
-  return `import { lowerCharCodeAt } from '../lowerCharCodeAt.js';
+  return `import { getAlphaCodeAt } from '../utils.js';
 
 export default function searchISO6391Language(str: string, offset: number): string | null {
-  if (str.length < offset + 3 || (str.length > offset + 3 && lowerCharCodeAt(str, offset + 3) !== -1)) {
+  if (str.length < offset + 3 || (str.length > offset + 3 && getAlphaCodeAt(str, offset + 3) !== -1)) {
     return null;
   }
 
-  const charCode0 = lowerCharCodeAt(str, offset) - /* a */ 97;
-  const charCode1 = lowerCharCodeAt(str, offset + 1) - /* a */ 97;
-  const charCode2 = lowerCharCodeAt(str, offset + 2) - /* a */ 97;
+  const charCode0 = getAlphaCodeAt(str, offset) - /* a */ 97;
+  const charCode1 = getAlphaCodeAt(str, offset + 1) - /* a */ 97;
+  const charCode2 = getAlphaCodeAt(str, offset + 2) - /* a */ 97;
   
   if (charCode0 < 0 || charCode1 < 0 || charCode2 < 0) {
     return null;
