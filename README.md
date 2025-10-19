@@ -1,7 +1,7 @@
 # locale-matcher
 
 The [super-fast](#performance) locale matcher and normalizer in
-[just 2 kB gzipped](https://bundlephobia.com/package/locale-matcher) with zero dependencies.
+[just 1 kB gzipped](https://bundlephobia.com/package/locale-matcher) with zero dependencies.
 
 ```shell
 npm install --save-prod locale-matcher
