@@ -13,7 +13,7 @@ import { matchLocaleOrLanguage } from './matchLocaleOrLanguage.js';
  *
  * @param requestedLocales The locale or the list of locales to match.
  * @param supportedLocales The list of supported locales.
- * @returns An index of locale in `locales` or -1 if no locale matched.
+ * @returns An index of a requested locale in `supportedLocales` or -1 if no locale was matched.
  */
 export function matchLocale(requestedLocales: string[] | string, supportedLocales: string[]): number {
   if (typeof requestedLocales === 'string') {

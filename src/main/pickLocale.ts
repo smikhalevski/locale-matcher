@@ -16,5 +16,6 @@ export function pickLocale(
 
 export function pickLocale(requestedLocale: string[] | string, supportedLocales: string[], defaultLocale?: string) {
   const index = matchLocale(requestedLocale, supportedLocales);
+
   return index !== -1 ? supportedLocales[index] : defaultLocale;
 }

@@ -1,12 +1,11 @@
-import searchISO6391Language from './gen/languages-trie.js';
-import { getAlphaCodeAt } from './utils.js';
+import { getAlpha2ByAlpha3LanguageAt, getAlphaCodeAt } from './utils.js';
 
 /**
  * The locale/language matching algorithm implementation.
  *
  * @param requestedLocale The locale to match.
  * @param supportedLocales The list of supported locales.
- * @returns An index of locale in `locales` or -1 if no locale matched.
+ * @returns An index of requested locale in `supportedLocales` or -1 if no locale was matched.
  */
 export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales: string[]): number {
   const exactIndex = supportedLocales.indexOf(requestedLocale);
@@ -23,9 +22,9 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
     ++initialI;
   }
 
-  const requestedAlpha2Language = searchISO6391Language(requestedLocale, initialI);
+  const requestedAlpha2Language = getAlpha2ByAlpha3LanguageAt(requestedLocale, initialI);
 
-  if (requestedAlpha2Language !== null) {
+  if (requestedAlpha2Language !== undefined) {
     ++initialI;
   }
 
@@ -43,9 +42,9 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
       ++initialJ;
     }
 
-    const supportedAlpha2Language = searchISO6391Language(supportedLocale, initialJ);
+    const supportedAlpha2Language = getAlpha2ByAlpha3LanguageAt(supportedLocale, initialJ);
 
-    if (supportedAlpha2Language !== null) {
+    if (supportedAlpha2Language !== undefined) {
       ++initialJ;
     }
 
@@ -70,7 +69,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
 
       if (i < requestedLength) {
         do {
-          if (requestedAlpha2Language !== null && i < initialI + 2) {
+          if (requestedAlpha2Language !== undefined && i < initialI + 2) {
             requestedCharCode = requestedAlpha2Language.charCodeAt(i - initialI);
           } else {
             requestedCharCode = getAlphaCodeAt(requestedLocale, i);
@@ -84,7 +83,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
 
       if (j < supportedLength) {
         do {
-          if (supportedAlpha2Language !== null && j < initialJ + 2) {
+          if (supportedAlpha2Language !== undefined && j < initialJ + 2) {
             supportedCharCode = supportedAlpha2Language.charCodeAt(j - initialJ);
           } else {
             supportedCharCode = getAlphaCodeAt(supportedLocale, j);

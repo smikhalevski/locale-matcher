@@ -208,7 +208,9 @@ const languages = {
 const alpha3ToAlpha2Languages = new Map<number, string>();
 const alpha2Languages = new Set<number>();
 
-for (const [alpha3, alpha2] of Object.entries(languages)) {
+for (const alpha3 in languages) {
+  const alpha2 = languages[alpha3 as keyof typeof languages];
+
   alpha3ToAlpha2Languages.set(
     (getAlphaCodeAt(alpha3, 0) << 16) + (getAlphaCodeAt(alpha3, 1) << 8) + getAlphaCodeAt(alpha3, 2),
     alpha2
@@ -239,27 +241,14 @@ export function getAlpha2ByAlpha3LanguageAt(str: string, index: number): string 
   }
 
   return alpha3ToAlpha2Languages.get(
-    (getAlphaCodeAt(str, 0) << 16) + (getAlphaCodeAt(str, 1) << 8) + getAlphaCodeAt(str, 2)
+    (getAlphaCodeAt(str, index) << 16) + (getAlphaCodeAt(str, index + 1) << 8) + getAlphaCodeAt(str, index + 2)
   );
 }
 
-export function getAlpha2LanguageAt(str: string, index: number): string | undefined {
+export function isAlpha2LanguageAt(str: string, index: number): boolean {
   if (str.length < index + 2 || (str.length > index + 2 && getAlphaCodeAt(str, index + 2) !== -1)) {
-    return undefined;
+    return false;
   }
 
-  return alpha3ToAlpha2Languages.get((getAlphaCodeAt(str, 0) << 8) + getAlphaCodeAt(str, 1));
-}
-
-/**
- * Returns `true` if a string represents a locale.
- */
-export function isLocale(str: string): boolean {
-  let index = 0;
-
-  while (index < str.length - 2 && getAlphaCodeAt(str, index) === -1) {
-    ++index;
-  }
-
-  return getAlpha2LanguageAt(str, index) !== undefined || getAlpha2ByAlpha3LanguageAt(str, index) !== undefined;
+  return alpha2Languages.has((getAlphaCodeAt(str, index) << 8) + getAlphaCodeAt(str, index + 1));
 }
