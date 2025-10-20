@@ -14,7 +14,7 @@ Pick the supported locale that best matches the requested locale:
 ```ts
 import { pickLocale } from 'locale-matcher';
 
-pickLocale('en_US', ['en-AU', 'en-GB', 'en', 'ru']);
+pickLocale(/* requested locale */ 'en_US', /* supported locales */ ['en-AU', 'en-GB', 'en', 'ru']);
 // ⮕ 'en'
 
 pickLocale('hy', ['en-AU', 'en-GB', 'en', 'ru']);
@@ -40,7 +40,7 @@ Get the index of the supported locale that best matches the requested one:
 ```ts
 import { matchLocale } from 'locale-matcher';
 
-matchLocale(/* requested locale */ 'en-US', /* supported locales */ ['en-AU', 'en-GB', 'en', 'ru']);
+matchLocale('en-US', ['en-AU', 'en-GB', 'en', 'ru']);
 // ⮕ 2
 
 matchLocale('hy', ['en-AU', 'en-GB', 'en', 'ru']);

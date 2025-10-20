@@ -1,7 +1,8 @@
 import { matchLocaleOrLanguage } from './matchLocaleOrLanguage.js';
+import { getAlphaCodeAt } from './utils.js';
 
 /**
- * Looks up a locale among `supportedLocales` that matches a `requestedLocale`.
+ * Looks up a locale among `supportedLocales` that matches a requested locale.
  *
  * ```ts
  * matchLocale('en-US', ['en-AU', 'en-GB', 'en', 'ru']);
@@ -20,23 +21,44 @@ export function matchLocale(requestedLocales: string[] | string, supportedLocale
     return matchLocaleOrLanguage(requestedLocales, supportedLocales);
   }
 
-  let localeIndex = -1;
-  let locale;
+  let prevIndex = -1;
+  let prevLocale;
+  let prevSubtagCount = 0;
 
-  for (const requestedLocale of requestedLocales) {
-    const nextLocaleIndex = matchLocaleOrLanguage(requestedLocale, supportedLocales);
+  for (let i = 0; i < requestedLocales.length; ++i) {
+    const nextIndex = matchLocaleOrLanguage(requestedLocales[i], supportedLocales);
 
-    if (nextLocaleIndex === -1) {
+    if (nextIndex === -1) {
       continue;
     }
 
-    const nextLocale = supportedLocales[nextLocaleIndex];
+    const nextLocale = supportedLocales[nextIndex];
 
-    if (locale === undefined || locale.length < nextLocale.length) {
-      locale = nextLocale;
-      localeIndex = nextLocaleIndex;
+    let nextSubtagCount = 0;
+
+    if (
+      prevLocale === undefined ||
+      (prevSubtagCount ||= getSubtagCount(prevLocale)) < (nextSubtagCount = getSubtagCount(nextLocale))
+    ) {
+      prevIndex = nextIndex;
+      prevLocale = nextLocale;
+      prevSubtagCount = nextSubtagCount;
     }
   }
 
-  return localeIndex;
+  return prevIndex;
+}
+
+export function getSubtagCount(locale: string): number {
+  let count = 0;
+
+  for (let i = 0, prevCharCode = -1, nextCharCode; i < locale.length; ++i, prevCharCode = nextCharCode) {
+    nextCharCode = getAlphaCodeAt(locale, i);
+
+    if (prevCharCode === -1 && nextCharCode !== -1) {
+      ++count;
+    }
+  }
+
+  return count;
 }

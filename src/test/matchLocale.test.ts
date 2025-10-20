@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest';
 import { matchLocale } from '../main/index.js';
+import { getSubtagCount } from '../main/matchLocale.js';
 
 test('matches ISO 639-2', () => {
   expect(matchLocale('rus', ['ru'])).toBe(0);
@@ -67,6 +68,13 @@ test('returns -1 if no locale matched', () => {
 test('matches multiple locales', () => {
   expect(matchLocale(['en_GB', 'ru'], ['pt', 'ru'])).toBe(1);
   expect(matchLocale(['en_GB', 'ru_RU'], ['pt', 'en', 'ru'])).toBe(1);
+  expect(matchLocale(['aaa-bbb', 'aaa-bbb-ccc'], ['aaa-bbb-xxx', 'aaa-bbb-ccc-xxx'])).toBe(1);
+  expect(matchLocale(['aaa-bbb-ccc', 'aaa-bbb'], ['aaa-bbb-xxx', 'aaa-bbb-ccc-xxx'])).toBe(1);
+  expect(matchLocale(['zh-CN', 'chi-US'], ['zh-CN', 'chi-US'])).toBe(0);
+  expect(matchLocale(['chi-US', 'zh-CN'], ['zh-CN', 'chi-US'])).toBe(1);
+  expect(matchLocale(['zh-CN', 'chi-US'], ['chi-US', 'zh-CN'])).toBe(1);
+  expect(matchLocale(['zh-CN', 'chi-US'], ['chi-US-xxxxxx', 'zh-CN-yyy'])).toBe(1);
+  expect(matchLocale(['chi-US', 'zh-CN'], ['chi-US-xxxxxx', 'zh-CN-yyy'])).toBe(0);
 });
 
 test('matches case insensitive', () => {
@@ -105,4 +113,17 @@ test('matches empty strings', () => {
   expect(matchLocale('+++', ['en', '', 'ru-RU'])).toBe(1);
   expect(matchLocale('+++', ['en', '+++', 'ru-RU'])).toBe(1);
   expect(matchLocale('', ['en', '+++', 'ru-RU'])).toBe(1);
+});
+
+test('returns number of subtags', () => {
+  expect(getSubtagCount('')).toBe(0);
+  expect(getSubtagCount('en')).toBe(1);
+  expect(getSubtagCount('+++en')).toBe(1);
+  expect(getSubtagCount('en+++')).toBe(1);
+  expect(getSubtagCount('+++en+++')).toBe(1);
+  expect(getSubtagCount('en-US')).toBe(2);
+  expect(getSubtagCount('en_US')).toBe(2);
+  expect(getSubtagCount('+++en_US')).toBe(2);
+  expect(getSubtagCount('en_US+++')).toBe(2);
+  expect(getSubtagCount('+++en_US+++')).toBe(2);
 });
