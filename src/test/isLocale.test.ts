@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import { isLocale } from '../main/index.js';
 
-test('returns true if string start with a language code', () => {
+test('returns true if string starts with a language code', () => {
   expect(isLocale('xx')).toBe(false);
   expect(isLocale('xx-')).toBe(false);
   expect(isLocale('en')).toBe(true);

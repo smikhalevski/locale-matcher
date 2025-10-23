@@ -7,7 +7,7 @@ import { getAlpha2ByAlpha3LanguageAt, getAlphaCodeAt } from './utils.js';
  * @param supportedLocales The list of supported locales.
  * @returns An index of requested locale in `supportedLocales` or -1 if no locale was matched.
  */
-export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales: string[]): number {
+export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales: readonly string[]): number {
   const exactIndex = supportedLocales.indexOf(requestedLocale);
 
   if (exactIndex !== -1) {

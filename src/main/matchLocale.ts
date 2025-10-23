@@ -16,7 +16,7 @@ import { getAlphaCodeAt } from './utils.js';
  * @param supportedLocales The list of supported locales.
  * @returns An index of a requested locale in `supportedLocales` or -1 if no locale was matched.
  */
-export function matchLocale(requestedLocales: string[] | string, supportedLocales: string[]): number {
+export function matchLocale(requestedLocales: readonly string[] | string, supportedLocales: readonly string[]): number {
   if (typeof requestedLocales === 'string') {
     return matchLocaleOrLanguage(requestedLocales, supportedLocales);
   }
