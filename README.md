@@ -1,7 +1,7 @@
 # locale-matcher
 
 The [super-fast](#performance) locale matcher and normalizer in
-[just 1 kB gzipped](https://bundlephobia.com/package/locale-matcher) with zero dependencies.
+[just 2 kB gzipped](https://bundlephobia.com/package/locale-matcher) with zero dependencies.
 
 ```shell
 npm install --save-prod locale-matcher
@@ -85,7 +85,7 @@ Memory consumption (RAM) is measured in bytes, the lower number is better.
 
 |                                                                                        |       Ops/sec |       RAM |
 | -------------------------------------------------------------------------------------- | ------------: | --------: |
-| locale-matcher                                                                         | **8,500 kHz** |  **90 B** |
+| locale-matcher                                                                         | **9,500 kHz** |  **90 B** |
 | [@formatjs/intl-localematcher](https://formatjs.io/docs/polyfills/intl-localematcher/) |         2 kHz | 357,000 B |
 
 Tests were conducted using [TooFast](https://github.com/smikhalevski/toofast#readme) on Apple M1 with Node.js v23.1.0.

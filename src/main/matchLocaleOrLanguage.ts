@@ -119,8 +119,8 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
     }
 
     // The number of matched subtags
-    const requestedSubtagCount = isRequestedEnded ? requestedSubtagIndex + 1 : requestedSubtagIndex;
-    const supportedSubtagCount = isSupportedEnded ? supportedSubtagIndex + 1 : supportedSubtagIndex;
+    const requestedSubtagCount = requestedSubtagIndex + +isRequestedEnded;
+    const supportedSubtagCount = supportedSubtagIndex + +isSupportedEnded;
 
     if (requestedSubtagCount === 0 || supportedSubtagCount < matchSubtagCount) {
       continue;
