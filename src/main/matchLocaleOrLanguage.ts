@@ -1,4 +1,4 @@
-import { getAlpha2ByAlpha3LanguageAt, getAlphaCodeAt } from './utils.js';
+import { getAlpha2ByAlpha3LanguageAt, getLowerAlphaCharCodeAt } from './utils.js';
 
 /**
  * The locale/language matching algorithm implementation.
@@ -18,7 +18,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
 
   let initialI = 0;
 
-  while (initialI < requestedLength && getAlphaCodeAt(requestedLocale, initialI) === -1) {
+  while (initialI < requestedLength && getLowerAlphaCharCodeAt(requestedLocale, initialI) === -1) {
     ++initialI;
   }
 
@@ -38,7 +38,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
 
     let initialJ = 0;
 
-    while (initialJ < supportedLength && getAlphaCodeAt(supportedLocale, initialJ) === -1) {
+    while (initialJ < supportedLength && getLowerAlphaCharCodeAt(supportedLocale, initialJ) === -1) {
       ++initialJ;
     }
 
@@ -72,7 +72,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
           if (requestedAlpha2Language !== undefined && i < initialI + 2) {
             requestedCharCode = requestedAlpha2Language.charCodeAt(i - initialI);
           } else {
-            requestedCharCode = getAlphaCodeAt(requestedLocale, i);
+            requestedCharCode = getLowerAlphaCharCodeAt(requestedLocale, i);
           }
           isRequestedSubtagSeparated ||= requestedCharCode === -1;
           ++i;
@@ -86,7 +86,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
           if (supportedAlpha2Language !== undefined && j < initialJ + 2) {
             supportedCharCode = supportedAlpha2Language.charCodeAt(j - initialJ);
           } else {
-            supportedCharCode = getAlphaCodeAt(supportedLocale, j);
+            supportedCharCode = getLowerAlphaCharCodeAt(supportedLocale, j);
           }
           isSupportedSubtagSeparated ||= supportedCharCode === -1;
           ++j;
@@ -119,8 +119,8 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
     }
 
     // The number of matched subtags
-    const requestedSubtagCount = isRequestedEnded ? requestedSubtagIndex + 1 : requestedSubtagIndex;
-    const supportedSubtagCount = isSupportedEnded ? supportedSubtagIndex + 1 : supportedSubtagIndex;
+    const requestedSubtagCount = requestedSubtagIndex + +isRequestedEnded;
+    const supportedSubtagCount = supportedSubtagIndex + +isSupportedEnded;
 
     if (requestedSubtagCount === 0 || supportedSubtagCount < matchSubtagCount) {
       continue;
@@ -130,7 +130,7 @@ export function matchLocaleOrLanguage(requestedLocale: string, supportedLocales:
       // The number of subtags is the same, so prefer the shorter locale
 
       while (j < supportedLength) {
-        if (getAlphaCodeAt(supportedLocale, j) !== -1) {
+        if (getLowerAlphaCharCodeAt(supportedLocale, j) !== -1) {
           ++supportedAlphaLength;
         }
         ++j;

@@ -1,5 +1,5 @@
 import { matchLocaleOrLanguage } from './matchLocaleOrLanguage.js';
-import { getAlphaCodeAt } from './utils.js';
+import { getLowerAlphaCharCodeAt } from './utils.js';
 
 /**
  * Looks up a locale among `supportedLocales` that matches a requested locale.
@@ -53,7 +53,7 @@ export function getSubtagCount(locale: string): number {
   let count = 0;
 
   for (let i = 0, prevCharCode = -1, nextCharCode; i < locale.length; ++i, prevCharCode = nextCharCode) {
-    nextCharCode = getAlphaCodeAt(locale, i);
+    nextCharCode = getLowerAlphaCharCodeAt(locale, i);
 
     if (prevCharCode === -1 && nextCharCode !== -1) {
       ++count;

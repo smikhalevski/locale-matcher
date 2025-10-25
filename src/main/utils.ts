@@ -206,23 +206,22 @@ const languages = {
 };
 
 const alpha3ToAlpha2Languages = new Map<number, string>();
-const alpha2Languages = new Set<number>();
 
 for (const alpha3 in languages) {
   const alpha2 = languages[alpha3 as keyof typeof languages];
 
   alpha3ToAlpha2Languages.set(
-    (getAlphaCodeAt(alpha3, 0) << 16) + (getAlphaCodeAt(alpha3, 1) << 8) + getAlphaCodeAt(alpha3, 2),
+    (getLowerAlphaCharCodeAt(alpha3, 0) << 16) +
+      (getLowerAlphaCharCodeAt(alpha3, 1) << 8) +
+      getLowerAlphaCharCodeAt(alpha3, 2),
     alpha2
   );
-
-  alpha2Languages.add((getAlphaCodeAt(alpha2, 0) << 8) + getAlphaCodeAt(alpha2, 1));
 }
 
 /**
- * Returns the ASCII-alpha char code at `index` in `str`. If char isn't an ASCII-alpha than -1 is returned.
+ * Returns the lower-case ASCII-alpha char code at `index` in `str`. If char isn't an ASCII-alpha than -1 is returned.
  */
-export function getAlphaCodeAt(str: string, index: number): number {
+export function getLowerAlphaCharCodeAt(str: string, index: number): number {
   const charCode = str.charCodeAt(index);
 
   if (charCode >= /* A */ 65 && charCode <= /* Z */ 90) {
@@ -236,19 +235,13 @@ export function getAlphaCodeAt(str: string, index: number): number {
 }
 
 export function getAlpha2ByAlpha3LanguageAt(str: string, index: number): string | undefined {
-  if (str.length < index + 3 || (str.length > index + 3 && getAlphaCodeAt(str, index + 3) !== -1)) {
+  if (str.length < index + 3 || (str.length > index + 3 && getLowerAlphaCharCodeAt(str, index + 3) !== -1)) {
     return undefined;
   }
 
   return alpha3ToAlpha2Languages.get(
-    (getAlphaCodeAt(str, index) << 16) + (getAlphaCodeAt(str, index + 1) << 8) + getAlphaCodeAt(str, index + 2)
+    (getLowerAlphaCharCodeAt(str, index) << 16) +
+      (getLowerAlphaCharCodeAt(str, index + 1) << 8) +
+      getLowerAlphaCharCodeAt(str, index + 2)
   );
-}
-
-export function isAlpha2LanguageAt(str: string, index: number): boolean {
-  if (str.length < index + 2 || (str.length > index + 2 && getAlphaCodeAt(str, index + 2) !== -1)) {
-    return false;
-  }
-
-  return alpha2Languages.has((getAlphaCodeAt(str, index) << 8) + getAlphaCodeAt(str, index + 1));
 }
